@@ -1,9 +1,11 @@
 import argparse
+import sys
 import tokenize
 from tokenize import TokenInfo
 import regex
 from pathlib import Path
-import glob
+
+from black import format_file_in_place, FileMode, WriteBack
 
 total_removed:int = 0
 
@@ -23,9 +25,27 @@ def replace_emojis_in_comment(text: TokenInfo, replacement: str = "") -> str:
             new_parts.append(g)
     return "".join(new_parts)
 
+def nuke_comments(path: Path):
+    print(f"-----scanning comments in {path}-----")
+    with open(path, "rb") as f:
+        tokens = list(tokenize.tokenize(f.readline))
+    
+    new_tokens = []
 
-def rewrite_file(path: Path):
-    print(f"scanning comments in {path}")
+    for token in tokens:
+        if token.type == tokenize.COMMENT:
+            print(f"removing comment from line {token.start[0]} of {path}")
+            pass
+        else:
+            new_tokens.append(token)
+
+    
+    
+    new_source = tokenize.untokenize(new_tokens)
+    path.write_bytes(new_source)
+
+def remove_emojis(path: Path):
+    print(f"-----scanning comments in {path}-----")
     with open(path, "rb") as f:
         tokens = list(tokenize.tokenize(f.readline))
 
@@ -42,6 +62,9 @@ def rewrite_file(path: Path):
                 token.line,
             )
         new_tokens.append(token)
+    
+    if tokens == new_tokens:
+            print(f"-----no emojis found in {path}-----")
 
     new_source = tokenize.untokenize(new_tokens)
 
@@ -49,6 +72,16 @@ def rewrite_file(path: Path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Clean up your comments")
+    parser.add_argument(
+        "--nuke",
+        action="store_true",
+        help="Removes ALL comments",
+    )
+    parser.add_argument(
+        "--emoji",
+        action="store_true",
+        help="Removes emojis"
+    )
     parser.add_argument(
         "--path",
         type=str,
@@ -73,18 +106,23 @@ def parse_args():
 def main():
     args = parse_args()
 
+    if len(sys.argv) == 1:                             
+        return print("clean -h for help")
+
     if args.path:
         path = args.path
     else:
         path = "."
 
-    ignore_dir = ["venv", "something"]
+    ignore_dir = ["venv", "tests"]
     if args.ignore_dir:
         ignore_dir.append(args.ignore_dir)
     
     ignore_file = []
     if args.ignore_file:
         ignore_file.append(args.ignore_file)
+
+    list_of_files = []
      
     for file in Path(path).rglob("*.py"):
         if any(part in ignore_dir for part in file.parent.parts):
@@ -92,7 +130,11 @@ def main():
         if any(str(file).endswith(to_ignore) for to_ignore in ignore_file):
             continue
         else:
-            rewrite_file(file)
+            list_of_files.append(file)
 
-
-    print(f"Removed {total_removed} emojis")
+    if args.emoji:
+        for file in list_of_files:
+            remove_emojis(file)
+    if args.nuke:
+        for file in list_of_files:
+            nuke_comments(file)
