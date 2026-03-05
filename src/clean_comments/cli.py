@@ -1,16 +1,14 @@
 import argparse
+import subprocess
 import sys
 import tokenize
 from tokenize import TokenInfo
 import regex
 from pathlib import Path
 
-from black import format_file_in_place, FileMode, WriteBack
+grapheme_pattern = regex.compile(r"\X", regex.UNICODE)
+emoji_pattern = regex.compile(r"\p{Extended_Pictographic}")
 
-total_removed:int = 0
-
-grapheme_pattern = regex.compile(r'\X', regex.UNICODE)
-emoji_pattern = regex.compile(r'\p{Extended_Pictographic}')
 
 def replace_emojis_in_comment(text: TokenInfo, replacement: str = "") -> str:
     graphemes = grapheme_pattern.findall(text.string)
@@ -20,32 +18,44 @@ def replace_emojis_in_comment(text: TokenInfo, replacement: str = "") -> str:
         if emoji_pattern.search(g):
             new_parts.append(replacement)
             print(f"removing {g} from line {text.start[0]}")
-            total_removed += 1
         else:
             new_parts.append(g)
     return "".join(new_parts)
 
+
 def nuke_comments(path: Path):
-    print(f"-----scanning comments in {path}-----")
+    print(f"----- scanning comments in {path} -----")
+    total_removed: int = 0
     with open(path, "rb") as f:
         tokens = list(tokenize.tokenize(f.readline))
-    
+
     new_tokens = []
 
     for token in tokens:
         if token.type == tokenize.COMMENT:
             print(f"removing comment from line {token.start[0]} of {path}")
+            total_removed += 1
             pass
         else:
             new_tokens.append(token)
 
-    
-    
+    if tokens == new_tokens:
+        print(f"----- no comments found in {path} -----")
+        print()
+        return
+
+    print(f"removed {total_removed} comments from {path}")
     new_source = tokenize.untokenize(new_tokens)
     path.write_bytes(new_source)
+    run_ruff(path=path)
+
+
+def run_ruff(path: Path):
+    subprocess.run(["ruff", "format", "--silent", str(path)], check=True)
+
 
 def remove_emojis(path: Path):
-    print(f"-----scanning comments in {path}-----")
+    print(f"----- scanning comments in {path} -----")
     with open(path, "rb") as f:
         tokens = list(tokenize.tokenize(f.readline))
 
@@ -62,13 +72,16 @@ def remove_emojis(path: Path):
                 token.line,
             )
         new_tokens.append(token)
-    
+
     if tokens == new_tokens:
-            print(f"-----no emojis found in {path}-----")
+        print(f"----- no emojis found in {path} -----")
+        print()
+        return
 
     new_source = tokenize.untokenize(new_tokens)
-
     path.write_bytes(new_source)
+    run_ruff(path=path)
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Clean up your comments")
@@ -77,11 +90,7 @@ def parse_args():
         action="store_true",
         help="Removes ALL comments",
     )
-    parser.add_argument(
-        "--emoji",
-        action="store_true",
-        help="Removes emojis"
-    )
+    parser.add_argument("--emoji", action="store_true", help="Removes emojis")
     parser.add_argument(
         "--path",
         type=str,
@@ -103,10 +112,11 @@ def parse_args():
     )
     return parser.parse_args()
 
+
 def main():
     args = parse_args()
 
-    if len(sys.argv) == 1:                             
+    if len(sys.argv) == 1:
         return print("clean -h for help")
 
     if args.path:
@@ -117,13 +127,13 @@ def main():
     ignore_dir = ["venv", "tests"]
     if args.ignore_dir:
         ignore_dir.append(args.ignore_dir)
-    
+
     ignore_file = []
     if args.ignore_file:
         ignore_file.append(args.ignore_file)
 
     list_of_files = []
-     
+
     for file in Path(path).rglob("*.py"):
         if any(part in ignore_dir for part in file.parent.parts):
             continue

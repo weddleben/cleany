@@ -5,51 +5,53 @@ The rest are plain technical comments.
 """
 
 import random
-import math 
+import math
 from typing import List
 
 
 # ============================================================
-# CONFIGURATION SECTION 
+# CONFIGURATION SECTION
 # ============================================================
 
-# Default number of samples to generate 
+# Default number of samples to generate
 DEFAULT_SAMPLE_SIZE = 25
 
-# Lower bound for random values 
+# Lower bound for random values
 LOWER_BOUND = 1
 
-# Upper bound for random values 
+# Upper bound for random values
 UPPER_BOUND = 50
 
-# Toggle verbose output 
+# Toggle verbose output
 VERBOSE = True
 
 
 # ============================================================
-# RANDOM DATA GENERATION 
+# RANDOM DATA GENERATION
 # ============================================================
 
+
 def generate_samples(count: int) -> List[int]:
-    # Generate a list of random integers within configured bounds 
+    # Generate a list of random integers within configured bounds
     samples = []
 
     # Loop exactly "count" times
     for _ in range(count):
-        # Append a random integer to the list 
+        # Append a random integer to the list
         value = random.randint(LOWER_BOUND, UPPER_BOUND)
         samples.append(value)
 
-    # Return completed list 
+    # Return completed list
     return samples
 
 
 # ============================================================
-# STATISTICS FUNCTIONS 
+# STATISTICS FUNCTIONS
 # ============================================================
 
+
 def compute_mean(values: List[int]) -> float:
-    # Compute arithmetic mean of values 
+    # Compute arithmetic mean of values
     if not values:
         return 0.0
 
@@ -57,7 +59,7 @@ def compute_mean(values: List[int]) -> float:
 
 
 def compute_std_dev(values: List[int]) -> float:
-    # Compute standard deviation 
+    # Compute standard deviation
     if not values:
         return 0.0
 
@@ -66,12 +68,12 @@ def compute_std_dev(values: List[int]) -> float:
     # Calculate variance first
     variance = sum((x - mean) ** 2 for x in values) / len(values)
 
-    # Return square root of variance 
+    # Return square root of variance
     return math.sqrt(variance)
 
 
 def find_extremes(values: List[int]) -> tuple[int, int]:
-    # Return minimum and maximum values 
+    # Return minimum and maximum values
     if not values:
         return (0, 0)
 
@@ -79,25 +81,27 @@ def find_extremes(values: List[int]) -> tuple[int, int]:
 
 
 # ============================================================
-# DATA FILTERING LOGIC 
+# DATA FILTERING LOGIC
 # ============================================================
 
+
 def filter_even(values: List[int]) -> List[int]:
-    # Keep only even numbers 
+    # Keep only even numbers
     return [v for v in values if v % 2 == 0]
 
 
 def filter_above(values: List[int], threshold: int) -> List[int]:
-    # Keep values strictly greater than threshold 
+    # Keep values strictly greater than threshold
     return [v for v in values if v > threshold]
 
 
 # ============================================================
-# REPORTING FUNCTION 
+# REPORTING FUNCTION
 # ============================================================
 
+
 def print_report(values: List[int]) -> None:
-    # Print a formatted statistical report 
+    # Print a formatted statistical report
     mean = compute_mean(values)
     std = compute_std_dev(values)
     minimum, maximum = find_extremes(values)
@@ -110,34 +114,35 @@ def print_report(values: List[int]) -> None:
     print(f"Max: {maximum}")
     print("------------------")
 
-    # Extra flair if verbose mode is enabled 
+    # Extra flair if verbose mode is enabled
     if VERBOSE:
         print("Values:", values)
         print("Report complete! ✅✨")
 
 
 # ============================================================
-# MAIN PROGRAM ENTRY 
+# MAIN PROGRAM ENTRY
 # ============================================================
 
-def main() -> None:
-    # Entry point for script execution 
 
-    # Step 1: Generate random samples 
+def main() -> None:
+    # Entry point for script execution
+
+    # Step 1: Generate random samples
     samples = generate_samples(DEFAULT_SAMPLE_SIZE)
 
-    # Step 2: Filter even numbers 
+    # Step 2: Filter even numbers
     evens = filter_even(samples)
 
-    # Step 3: Filter numbers above midpoint 
+    # Step 3: Filter numbers above midpoint
     midpoint = (LOWER_BOUND + UPPER_BOUND) // 2
     high_values = filter_above(evens, midpoint)
 
-    # Step 4: Print report 
+    # Step 4: Print report
     print_report(high_values)
 
 
-# Standard Python entry-point guard 
+# Standard Python entry-point guard
 if __name__ == "__main__":
-    # Execute main only when run directly 
+    # Execute main only when run directly
     main()
