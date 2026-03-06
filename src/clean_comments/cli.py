@@ -117,7 +117,7 @@ def main():
     args = parse_args()
 
     if len(sys.argv) == 1:
-        return print("clean -h for help")
+        return print("cleany -h for help")
 
     if args.path:
         path = args.path
