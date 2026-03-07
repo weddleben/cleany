@@ -25,4 +25,4 @@ where = ["src"]
 include = ["clean_comments*"]
 
 [project.scripts]
-cleany = "clean_comments.cli:main"
+cleany = "cleany.cli:main"

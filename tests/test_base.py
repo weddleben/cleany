@@ -1,4 +1,4 @@
-from clean_comments import remove_emojis, nuke_comments
+from cleany import remove_emojis, nuke_comments
 
 from pathlib import Path
 def test_remove_emojis_1(tmp_path):
