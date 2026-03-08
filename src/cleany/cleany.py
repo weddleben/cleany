@@ -35,7 +35,7 @@ class Cleany(BaseModel):
                 self.nuke_comments(file)
             if self.emoji:
                 self.remove_emojis(file)
-                print(f"removed {self.total_emojis_removed} emojis")
+                self.print_to_screen(f"removed {self.total_emojis_removed} emojis")
 
     def create_list_of_files(self) -> list[Path]:
         list_of_files: list = []
