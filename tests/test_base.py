@@ -36,7 +36,6 @@ def test_init_6():
 def test_init_7(tmp_path):
     '''specifying directory with no matching python files'''
     output = subprocess.run(["cleany", "--path", tmp_path, "--nuke"], capture_output=True)
-    print(tmp_path)
     assert "no files found in" in str(output.stdout)
 
 def test_remove_emojis_1(tmp_path):
