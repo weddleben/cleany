@@ -27,3 +27,6 @@ include = ["cleany*"]
 
 [project.scripts]
 cleany = "cleany.cli:main"
+
+[tool.ruff.format]
+quote-style = "preserve"

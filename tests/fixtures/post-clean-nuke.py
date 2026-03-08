@@ -20,6 +20,8 @@ UPPER_BOUND = 50
 
 VERBOSE = True
 
+something: str = 'single quoted string'
+
 
 def generate_samples(count: int) -> List[int]:
 

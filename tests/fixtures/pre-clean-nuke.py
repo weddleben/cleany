@@ -25,6 +25,8 @@ UPPER_BOUND = 50
 # Toggle verbose output 🗣️
 VERBOSE = True
 
+something:str = 'single quoted string'
+
 
 # ============================================================
 # RANDOM DATA GENERATION 🎲✨
