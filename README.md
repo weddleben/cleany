@@ -3,6 +3,7 @@
 ![tests](https://github.com/weddleben/cleany/actions/workflows/cleany.yml/badge.svg)
 ![GitHub issues](https://img.shields.io/github/issues/weddleben/cleany.png)
 ![last-commit](https://img.shields.io/github/last-commit/weddleben/cleany)
+![Supported Versions](https://img.shields.io/pypi/pyversions/cleany.svg)
 
 A CLI tool to clean up your comments
 
