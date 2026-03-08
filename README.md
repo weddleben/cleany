@@ -5,7 +5,7 @@
 ![last-commit](https://img.shields.io/github/last-commit/weddleben/cleany)
 ![Supported Versions](https://img.shields.io/pypi/pyversions/cleany.svg)
 
-A CLI tool to clean up your comments
+A CLI tool to clean up your Python comments
 
 ## Install
 Install via pip
@@ -17,7 +17,6 @@ $ pip install cleany
 Cleany is a command line tool. Once installed, invoke it from the command line:
 ````bash
 $ cleany
-
 > cleany -h for help
 ````
 
