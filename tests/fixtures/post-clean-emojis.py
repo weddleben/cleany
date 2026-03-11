@@ -1,6 +1,6 @@
 """
-Shorter demo Python file (~130 lines) with LOTS of comments 😄🔥
-Many of the comments below intentionally contain emojis 🎉✨🐍
+Shorter demo Python file (~130 lines) with LOTS of comments
+Many of the comments below intentionally contain emojis
 The rest are plain technical comments.
 """
 
@@ -117,7 +117,7 @@ def print_report(values: List[int]) -> None:
     # Extra flair if verbose mode is enabled
     if VERBOSE:
         print("Values:", values)
-        print("Report complete! ✅✨")
+        print("Report complete! ")
 
 
 # ============================================================

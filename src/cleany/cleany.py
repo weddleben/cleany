@@ -36,13 +36,22 @@ class Cleany(BaseModel):
             if self.emoji:
                 self.remove_emojis(file)
                 self.print_to_screen(f"removed {self.total_emojis_removed} emojis")
+    def file_is_skippable(self, file: Path):
+            if not file.is_file():
+                return True
+            if any(part.startswith(".") for part in file.parent.parts):
+                return True
+            if str(file).endswith(".pyc"):
+                return True
+            if any(part in self.ignore_dir for part in file.parent.parts):
+                return True
+            if any(str(file).endswith(to_ignore) for to_ignore in self.ignore_file):
+                return True
 
     def create_list_of_files(self) -> list[Path]:
         list_of_files: list = []
-        for file in self.path.rglob("*.py"):
-            if any(part in self.ignore_dir for part in file.parent.parts):
-                continue
-            if any(str(file).endswith(to_ignore) for to_ignore in self.ignore_file):
+        for file in self.path.rglob("*"):
+            if self.file_is_skippable(file):
                 continue
             else:
                 list_of_files.append(file)
@@ -76,39 +85,33 @@ class Cleany(BaseModel):
 
     def remove_emojis(self, path: Path):
         self.print_to_screen(f"----- scanning comments in {path} -----")
-        with open(path, "rb") as f:
-            tokens = list(tokenize.tokenize(f.readline))
+        tokens = path.read_text(encoding="utf-8", errors="ignore").splitlines()
 
         new_tokens = []
 
         for token in tokens:
-            if token.type == tokenize.COMMENT:
-                new_comment = self.replace_emojis_in_comment(token)
-                token = tokenize.TokenInfo(
-                    token.type,
-                    new_comment,
-                    token.start,
-                    token.end,
-                    token.line,
-                )
-            new_tokens.append(token)
+            if token == "":
+                new_tokens.append(token)
+                continue
+            new_string = self.replace_emojis_in_comment(text=token, path=path)
+            new_tokens.append(new_string)
 
         if tokens == new_tokens:
             self.print_to_screen(f"----- no emojis found in {path} -----")
             self.print_to_screen(statement="")
             return
 
-        new_source = tokenize.untokenize(new_tokens)
-        path.write_bytes(new_source)
-        self.run_ruff(path=path)
+        path.write_text("\n".join(new_tokens))
+        if path.suffix == ".py":
+            self.run_ruff(path=path)
 
-    def replace_emojis_in_comment(self, text: TokenInfo, replacement: str = "") -> str:
-        graphemes = grapheme_pattern.findall(text.string)
+    def replace_emojis_in_comment(self, path: Path, text: str, replacement: str = "") -> str:
+        graphemes = grapheme_pattern.findall(text)
         new_parts = []
         for g in graphemes:
             if emoji_pattern.search(g):
                 new_parts.append(replacement)
-                self.print_to_screen(f"removing {g} from line {text.start[0]}")
+                self.print_to_screen(f"removing {g} from {path}")
                 self.total_emojis_removed += 1
             else:
                 new_parts.append(g)
