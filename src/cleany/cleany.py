@@ -58,6 +58,8 @@ class Cleany(BaseModel):
         return list_of_files
 
     def nuke_comments(self, path: Path):
+        if not path.suffix == ".py":
+            return
         self.print_to_screen(f"----- scanning comments in {path} -----")
         total_removed: int = 0
         with open(path, "rb") as f:
