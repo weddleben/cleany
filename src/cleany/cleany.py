@@ -27,7 +27,7 @@ class Cleany(BaseModel):
         if not any([self.nuke, self.emoji]):
             return print("no modification commands")
         if not self.path.exists():
-            return print(f"cannot find matchign directory: {self.path}")
+            return print(f"cannot find matching directory: {self.path}")
         if len(self.list_of_files) == 0:
             return print(f"no files found in {self.path}")
         for file in self.list_of_files:
