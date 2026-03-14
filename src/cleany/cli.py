@@ -55,9 +55,6 @@ def main():
     ignore_file = []
     for ignored in args.ignore_file:
         ignore_file.append(ignored)
-
-
-    print(ignore_file)
     
     cleany = Cleany(
         path=args.path,

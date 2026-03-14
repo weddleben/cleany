@@ -70,7 +70,7 @@ class Cleany(BaseModel):
             return True
 
     def create_list_of_files(self) -> list[Path]:
-        self.print_to_screen(statement=f"-----Scanning files in {self.path.absolute()}-----")
+        self.print_to_screen(statement=f"----- Scanning files in {self.path.absolute()} -----")
         list_of_files: list = []
         for file in self.path.rglob("*"):
             if self.file_is_skippable(file):
@@ -78,12 +78,19 @@ class Cleany(BaseModel):
             else:
                 list_of_files.append(file)
         number_of_files: int = len(list_of_files)
-        self.print_to_screen(statement=f"-----found {number_of_files} files in {self.path.absolute()}-----")
+        self.print_to_screen(statement=f"----- found {number_of_files} valid files in {self.path.absolute()} -----")
         return list_of_files
 
     def nuke_comments(self):
         paths: list[Path] = self.list_of_files
-        self.print_to_screen(statement=f"----- Scanning for Python files -----")
+        self.print_to_screen(statement=f"----- --nuke is only valid for Python files -----")
+
+        total_python_files: int = 0
+        for path in paths:
+            if path.suffix == ".py":
+                total_python_files +=1
+        self.print_to_screen(statement=f"----- found {total_python_files} Python files -----")
+
         for path in paths:
             if not path.suffix == ".py":
                 continue
