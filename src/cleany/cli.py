@@ -2,7 +2,7 @@ import argparse
 from pathlib import Path
 import sys
 
-from cleany.cleany import Cleany, CleanyCLIArgs
+from cleany import Cleany, CleanyCLIArgs
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Cleany", allow_abbrev=False)
