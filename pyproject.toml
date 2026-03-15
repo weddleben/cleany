@@ -2,7 +2,7 @@
 name = "cleany"
 version = "0.2.5"
 description = "A CLI tool to clean up your Python comments"
-license-files = ["LICENSE.txt"]
+license = {file = "LICENSE.txt"}
 readme = "README.md"
 authors = [{name = "Ben Weddle", email = "ben.weddle@gmail.com"}]
 maintainers = [{name = "Ben Weddle", email = "ben.weddle@gmail.com"}]
@@ -31,6 +31,9 @@ Issues = "https://github.com/weddleben/cleany/issues"
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+license-files = ["LICENSE.txt"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
