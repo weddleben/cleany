@@ -1,5 +1,4 @@
 import argparse
-from pathlib import Path
 import sys
 
 from cleany import Cleany, CleanyCLIArgs

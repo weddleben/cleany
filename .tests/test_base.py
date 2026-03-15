@@ -1,8 +1,6 @@
 from pathlib import Path
 import subprocess
 
-import pytest
-
 def test_init_1():
     '''if nothing passed in, should return default help message'''
     output = subprocess.run("cleany", capture_output=True)

@@ -1,6 +1,5 @@
 import subprocess
 import tokenize
-from tokenize import TokenInfo
 import regex
 from pathlib import Path
 
