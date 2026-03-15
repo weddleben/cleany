@@ -38,6 +38,20 @@ def test_init_7(tmp_path):
     output = subprocess.run(["cleany", "--path", tmp_path, "--nuke"], capture_output=True)
     assert "no files found in" in str(output.stdout)
 
+def test_init_8():
+    '''runs...'''
+    output = subprocess.run(["cleany", "--emoji"], capture_output=True)
+    expected: list = ["removed", "emojis", "from", "files"]
+    for segment in expected:
+        assert segment in str(output.stdout)
+
+def test_init_9():
+    '''runs...'''
+    output = subprocess.run(["cleany", "--nuke"], capture_output=True)
+    expected: list = ["removed", "comments", "from", "files"]
+    for segment in expected:
+        assert segment in str(output.stdout)
+
 def test_quiet():
     output = subprocess.run(["cleany", "--nuke", "--quiet"], capture_output=True)
     output = str(output.stdout).strip("b''")
