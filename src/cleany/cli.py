@@ -46,6 +46,12 @@ def parse_args():
         action="store_true",
         help="print the current version"
     )
+    parser.add_argument(
+        "--no-ruff",
+        action="store_true",
+        default=False,
+        help="disable Ruff formatting for Python files"
+    )
     if len(sys.argv) == 1:
         print("cleany -h for help")
         sys.exit()
@@ -64,16 +70,13 @@ def main():
     for ignored in args.ignore_dir:
         ignore_dir.append(ignored)
 
-    ignore_file = []
-    for ignored in args.ignore_file:
-        ignore_file.append(ignored)
-
     cleany_args = CleanyCLIArgs(
         path=args.path,
         ignore_dir=ignore_dir,
-        ignore_file=ignore_file,
+        ignore_file=args.ignore_file,
         nuke=args.nuke,
         emoji=args.emoji,
+        no_ruff=args.no_ruff,
         quiet=args.quiet
     )
     

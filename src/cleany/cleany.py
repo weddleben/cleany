@@ -11,6 +11,7 @@ class CleanyCLIArgs(BaseModel):
     ignore_file: list = Field(default_factory=list)
     nuke: bool = False
     emoji: bool = False
+    no_ruff: bool = False
     quiet: bool = False
 
 
@@ -165,6 +166,8 @@ class Cleany(BaseModel):
         return "".join(new_parts)
 
     def run_ruff(self, path: Path):
+        if self.args.no_ruff:
+            return
         commands: list = ["ruff", "format", "--silent", "--config", "format.quote-style='preserve'", str(path)]
         subprocess.run(commands, check=True)
 
