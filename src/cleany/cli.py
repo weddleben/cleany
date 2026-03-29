@@ -69,14 +69,10 @@ def main():
     for ignored in args.ignore_dir:
         ignore_dir.append(ignored)
 
-    ignore_file = []
-    for ignored in args.ignore_file:
-        ignore_file.append(ignored)
-
     cleany_args = CleanyCLIArgs(
         path=args.path,
         ignore_dir=ignore_dir,
-        ignore_file=ignore_file,
+        ignore_file=args.ignore_file,
         nuke=args.nuke,
         emoji=args.emoji,
         ruff=args.no_ruff,
