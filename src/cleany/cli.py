@@ -49,6 +49,7 @@ def parse_args():
     parser.add_argument(
         "--no-ruff",
         action="store_true",
+        default=False,
         help="disable Ruff formatting for Python files"
     )
     if len(sys.argv) == 1:
@@ -75,7 +76,7 @@ def main():
         ignore_file=args.ignore_file,
         nuke=args.nuke,
         emoji=args.emoji,
-        ruff=args.no_ruff,
+        no_ruff=args.no_ruff,
         quiet=args.quiet
     )
     

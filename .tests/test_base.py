@@ -102,6 +102,17 @@ def test_remove_emojis_1(tmp_path):
 
     assert temp.read_text() == post.read_text()
 
+def test_remove_emojis_no_ruff_1(tmp_path):
+    pre = Path(".tests/fixtures/pre-clean-emojis.py")
+    post = Path(".tests/fixtures/post-clean-emojis-no-ruff.py")
+
+    temp: Path = tmp_path / "emoji_no_ruff.py"
+    temp.write_text(pre.read_text())
+
+    subprocess.run(["cleany", "--emoji", "--no-ruff", "--path", tmp_path])
+
+    assert temp.read_text() == post.read_text()
+
 def test_nuke_1(tmp_path):
     pre = Path(".tests/fixtures/pre-clean-nuke.py")
     post = Path(".tests/fixtures/post-clean-nuke.py")
@@ -110,5 +121,16 @@ def test_nuke_1(tmp_path):
     temp.write_text(pre.read_text())
 
     subprocess.run(["cleany", "--nuke", "--path", tmp_path])
+
+    assert temp.read_text() == post.read_text()
+
+def test_nuke_no_ruff_1(tmp_path):
+    pre = Path(".tests/fixtures/pre-clean-nuke.py")
+    post = Path(".tests/fixtures/post-clean-nuke-no-ruff.py")
+
+    temp: Path = tmp_path / "nuke-no-ruff.py"
+    temp.write_text(pre.read_text())
+    
+    subprocess.run(["cleany", "--nuke", "--no-ruff", "--path", tmp_path])
 
     assert temp.read_text() == post.read_text()
