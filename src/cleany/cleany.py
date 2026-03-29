@@ -165,7 +165,8 @@ class Cleany(BaseModel):
         return "".join(new_parts)
 
     def run_ruff(self, path: Path):
-        subprocess.run(["ruff", "format", "--silent", str(path)], check=True)
+        commands: list = ["ruff", "format", "--silent", "--config", "format.quote-style='preserve'", str(path)]
+        subprocess.run(commands, check=True)
 
     def print_to_screen(self, statement):
         if not self.args.quiet:
