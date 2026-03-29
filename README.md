@@ -24,6 +24,13 @@ $ cleany
 ````bash
 $ cleany --emoji
 ````
+Cleany will attempt to remove all emojis from all valid UTF-8 text files it finds.
+
+IF cleany removes at least one emoji from a `.py` file, it will attempt to refactor the file using [Ruff](https://pypi.org/project/ruff/). Since this can significantly change the shape of your source files, you can disable Ruff:
+````bash
+$ cleany --emoji --no-ruff
+````
+If cleany does not remove an emoji from a Python file, it will not run Ruff against it.
 
 ### Change the path.
 Cleany will search for files starting in your current directory and moving recursively down. If you would like to specify a directory, use `--path`:
@@ -59,8 +66,7 @@ If cleany finds `.py` files, it can remove all `#` comments from them. Does not 
 ````bash
 $ cleany --nuke
 ````
-IF cleany removes at least one comment from a `.py` files, it will attempt to refactor the file using [Ruff](https://pypi.org/project/ruff/). Since this can significantly change the shape of your source files, you can disable Ruff:
-> NOT IMPLEMENTED
+IF cleany removes at least one comment from a `.py` file, it will attempt to refactor the file using [Ruff](https://pypi.org/project/ruff/). Since this can significantly change the shape of your source files, you can disable Ruff:
 ````bash
 $ cleany --nuke --no-ruff
 ````
