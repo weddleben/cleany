@@ -11,6 +11,7 @@ class CleanyCLIArgs(BaseModel):
     ignore_file: list = Field(default_factory=list)
     nuke: bool = False
     emoji: bool = False
+    ruff: bool = False
     quiet: bool = False
 
 

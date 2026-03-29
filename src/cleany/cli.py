@@ -46,6 +46,11 @@ def parse_args():
         action="store_true",
         help="print the current version"
     )
+    parser.add_argument(
+        "--no-ruff",
+        action="store_true",
+        help="disable Ruff formatting for Python files"
+    )
     if len(sys.argv) == 1:
         print("cleany -h for help")
         sys.exit()
@@ -74,6 +79,7 @@ def main():
         ignore_file=ignore_file,
         nuke=args.nuke,
         emoji=args.emoji,
+        ruff=args.no_ruff,
         quiet=args.quiet
     )
     
