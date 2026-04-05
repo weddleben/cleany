@@ -150,3 +150,13 @@ def test_nuke_no_ruff_1(tmp_path):
     subprocess.run(["cleany", "--nuke", "--no-ruff", "--path", tmp_path])
 
     assert temp.read_text() == post.read_text()
+
+def test_remove_emojis_js_1(tmp_path):
+    pre: Path = Path(".tests/fixtures/pre-clean-js.js")
+    post: Path = Path(".tests/fixtures/post-clean-js.js")
+    
+    temp: Path = tmp_path / "del.js"
+    temp.write_text(pre.read_text())
+
+    subprocess.run(["cleany", "--emoji", "--path", tmp_path])
+    assert temp.read_text() == post.read_text()
