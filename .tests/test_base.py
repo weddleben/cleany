@@ -102,6 +102,22 @@ def test_remove_emojis_1(tmp_path):
 
     assert temp.read_text() == post.read_text()
 
+def test_remove_mul_emojis_1(tmp_path):
+    '''place multiple files in the Path. Reusing pre-clean-nuke as a generic file and only removing emojis'''
+    file_1_pre = Path(".tests/fixtures/pre-clean-emojis.py")
+    file_2_pre = Path(".tests/fixtures/pre-clean-nuke.py")
+    file_1_post = Path(".tests/fixtures/post-clean-emojis.py")
+    file_2_post = Path(".tests/fixtures/post-clean-nuke-emojis-only.py")
+
+    temp_1: Path = tmp_path / "1.py"
+    temp_1.write_text(file_1_pre.read_text())
+    temp_2: Path = tmp_path / "2.py"
+    temp_2.write_text(file_2_pre.read_text())
+
+    subprocess.run(["cleany", "--emoji", "--path", tmp_path])
+    assert temp_1.read_text() == file_1_post.read_text()
+    assert temp_2.read_text() == file_2_post.read_text()
+
 def test_remove_emojis_no_ruff_1(tmp_path):
     pre = Path(".tests/fixtures/pre-clean-emojis.py")
     post = Path(".tests/fixtures/post-clean-emojis-no-ruff.py")
